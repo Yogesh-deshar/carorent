@@ -1,11 +1,12 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
+import Link from "next/link";
 import React from "react";
 
 const Navbar = () => {
   return (
     <>
-      <header className="h-[62px] bg-[#F9F4F4] w-[100dvw]">
+      <header className="h-[62px] bg-[#F9F4F4] w-full">
         <nav className=" flex items-center justify-between mx-30">
           <Image
             src="/logo.png"
@@ -44,9 +45,15 @@ const Navbar = () => {
           <div className="flex gap-5 items-center">
             <div>
               <ul className="flex gap-5 text-[black]">
-                <li>Home</li>
-                <li>About</li>
-                <li>Contact</li>
+                <li>
+                  <Link href="/Home">Home</Link>
+                </li>
+                <li>
+                  <Link href="/about">About</Link>
+                </li>
+                <li>
+                  <Link href="/contact">Contact</Link>
+                </li>
               </ul>
             </div>
 
@@ -66,6 +73,25 @@ const Navbar = () => {
                   />
                 </svg>
                 Login
+              </Button>
+
+              <Button className="bg-transparent text-black border border-black rounded-full p-3">
+                <Link href="/Profile/1">
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="24"
+                    height="24"
+                    viewBox="0 0 24 24"
+                  >
+                    <g fill="none" stroke="currentColor" stroke-width="2">
+                      <path
+                        stroke-linejoin="round"
+                        d="M4 18a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"
+                      />
+                      <circle cx="12" cy="7" r="3" />
+                    </g>
+                  </svg>
+                </Link>
               </Button>
             </div>
           </div>
