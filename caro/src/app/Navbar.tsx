@@ -1,21 +1,22 @@
 import { Button } from "@/components/ui/button";
 import Image from "next/image";
 import Link from "next/link";
-import React from "react";
 
 const Navbar = () => {
   return (
     <>
       <header className="h-[62px] bg-[#F9F4F4] w-full">
         <nav className=" flex items-center justify-between mx-30">
-          <Image
-            src="/logo.png"
-            alt="Carorent logo"
-            width={90}
-            height={62}
-            style={{ height: "auto" }}
-            className="mix-blend-darken"
-          />
+          <Link href="/Home">
+            <Image
+              src="/logo.png"
+              alt="Carorent logo"
+              width={90}
+              height={62}
+              style={{ height: "auto" }}
+              className="mix-blend-darken"
+            />
+          </Link>
 
           <div className="w-[420px] rounded-2xl border-black border flex items-center">
             <input
@@ -83,7 +84,7 @@ const Navbar = () => {
                     height="24"
                     viewBox="0 0 24 24"
                   >
-                    <g fill="none" stroke="currentColor" stroke-width="2">
+                    <g fill="none" stroke="currentColor" strokeWidth={2}>
                       <path
                         stroke-linejoin="round"
                         d="M4 18a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"

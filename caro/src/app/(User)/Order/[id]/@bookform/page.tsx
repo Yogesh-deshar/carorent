@@ -8,7 +8,7 @@ import { Label } from "@/components/ui/label";
 const Bookform = () => {
   return (
     <>
-      <section className="md:mx-30 mt-5">
+      <section className="md:mx-30 mt-10">
         <Card>
           <CardHeader className="text-[36px]">Booking Conform Form</CardHeader>
 
@@ -41,7 +41,6 @@ const Bookform = () => {
                 className="w-[510px] border border-black"
                 type="number"
                 maxLength={10}
-                
                 name=""
                 id=""
                 placeholder="Please Enter Your Phone Number Here"
