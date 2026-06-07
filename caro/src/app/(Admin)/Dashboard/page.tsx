@@ -1,3 +1,4 @@
+import AdminGuard from "@/components/AdminGuard";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
 import Dashboard from "./Dashboard";
@@ -6,7 +7,7 @@ import Addcar from "./Addcar";
 
 const AdminDashboard = () => {
   return (
-    <>
+    <AdminGuard>
       <section className="bg-[#f0f0f0]  ">
         <Tabs defaultValue="dashboard" orientation="vertical">
           <TabsList className="flex flex-col gap-2 w-[200px]   rounded-none bg-white !h-full">
@@ -53,7 +54,7 @@ const AdminDashboard = () => {
           </TabsContent>
         </Tabs>
       </section>
-    </>
+    </AdminGuard>
   );
 };
 

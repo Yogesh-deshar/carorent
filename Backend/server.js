@@ -8,6 +8,7 @@ import mongoose from "mongoose";
 // import multer from "multer";
 import connectDB from "./config/database.js";
 import router from "./routes/user.routes.js";
+import vehiclesRouter from "./routes/vehicles.route.js";
 
 // const multer = require("multer");
 
@@ -18,10 +19,23 @@ dotenv.config({
 });
 
 app.use(express.json());
-app.use(cors());
+app.use(
+  cors({
+    origin: [
+      "http://localhost:3000",
+      "http://localhost:3001",
+      "http://127.0.0.1:3000",
+    ],
+    credentials: true,
+  }),
+);
+
+// Serve static files from uploads directory
+app.use("/uploads", express.static("uploads"));
 
 // Register routes BEFORE starting server
 app.use("/api/users", router);
+app.use("/api/vehicles", vehiclesRouter);
 
 const ServerStart = async () => {
   try {

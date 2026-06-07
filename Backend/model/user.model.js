@@ -26,8 +26,6 @@ const userSchema = new mongoose.Schema(
     Password: {
       type: String,
       required: true,
-      minlength: 6,
-      maxlength: 30,
     },
     DrivingLicenseNumber: {
       type: String,
@@ -41,6 +39,11 @@ const userSchema = new mongoose.Schema(
       required: true,
       trim: true,
       maxlength: 100,
+    },
+    Role: {
+      type: String,
+      enum: ["user", "admin"],
+      default: "user",
     },
   },
   {
