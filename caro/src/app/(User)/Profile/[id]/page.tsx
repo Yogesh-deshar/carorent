@@ -1,3 +1,4 @@
+"use client";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
@@ -5,12 +6,15 @@ import Image from "next/image";
 import Rented from "./Rented";
 import Edit from "./Edit";
 
+import { useRouter } from "next/navigation";
+import { clearAuth } from "@/lib/auth";
 const Profile = () => {
+  const router = useRouter();
   return (
     <>
       <section className=" mt-5 mx-[30px]">
         <Tabs defaultValue="info" className="flex !flex-row rounded-none">
-          <div >
+          <div>
             <TabsList className="flex flex-col gap-2 !h-[550px]  justify-start rounded-none bg-white">
               <TabsTrigger
                 value="info"
@@ -39,6 +43,26 @@ const Profile = () => {
               >
                 Delete Account
               </TabsTrigger>
+              <Button
+                className="w-[360px] p-3 flex-0 rounded-none justify-start data-[state=active]:bg-[#DEDCDC] bg-transparent text-black  px-[34px] py-[10px]"
+                onClick={() => {
+                  clearAuth();
+                  router.push("/");
+                }}
+              >
+                Logout
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                >
+                  <path
+                    fill="currentColor"
+                    d="M5 21h14c1.1 0 2-.9 2-2v-7h-2v7H5V5h7V3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2"
+                  />
+                </svg>
+              </Button>
             </TabsList>
           </div>
 

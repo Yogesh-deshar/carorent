@@ -1,8 +1,29 @@
+"use client";
+
 import { Button } from "@/components/ui/button";
+import { AuthUser, getAuthSnapshot, subscribeToAuth } from "@/lib/auth";
 import Image from "next/image";
 import Link from "next/link";
+import { useMemo, useSyncExternalStore } from "react";
+
+function parseAuthUser(snapshot: string | null): AuthUser | null {
+  if (!snapshot) return null;
+
+  try {
+    return JSON.parse(snapshot) as AuthUser;
+  } catch {
+    return null;
+  }
+}
 
 const Navbar = () => {
+  const userSnapshot = useSyncExternalStore(
+    subscribeToAuth,
+    getAuthSnapshot,
+    () => null,
+  );
+  const user = useMemo(() => parseAuthUser(userSnapshot), [userSnapshot]);
+
   return (
     <>
       <header className="h-[62px] bg-[#F9F4F4] w-full">
@@ -13,6 +34,7 @@ const Navbar = () => {
               alt="Carorent logo"
               width={90}
               height={62}
+              priority
               style={{ height: "auto" }}
               className="mix-blend-darken"
             />
@@ -59,43 +81,48 @@ const Navbar = () => {
             </div>
 
             <div>
-              <Button className="bg-[#10C979] " asChild>
-                <Link href="/Login">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <path
-                      fill="currentColor"
-                      fillRule="evenodd"
-                      d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0m0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5z"
-                      clipRule="evenodd"
-                    />
-                  </svg>
-                  Login
-                </Link>
-              </Button>
-
-              <Button className="bg-transparent text-black border border-black rounded-full p-3">
-                <Link href="/Profile/1">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="24"
-                    height="24"
-                    viewBox="0 0 24 24"
-                  >
-                    <g fill="none" stroke="currentColor" strokeWidth={2}>
+              {user ? (
+                <Button
+                  className="bg-transparent text-black border border-black rounded-full p-3"
+                  asChild
+                >
+                  <Link href={`/Profile/${user._id}`}>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                    >
+                      <g fill="none" stroke="currentColor" strokeWidth={2}>
+                        <path
+                          strokeLinejoin="round"
+                          d="M4 18a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"
+                        />
+                        <circle cx="12" cy="7" r="3" />
+                      </g>
+                    </svg>
+                  </Link>
+                </Button>
+              ) : (
+                <Button className="bg-[#10C979]" asChild>
+                  <Link href="/Login">
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="24"
+                      height="24"
+                      viewBox="0 0 24 24"
+                    >
                       <path
-                        strokeLinejoin="round"
-                        d="M4 18a4 4 0 0 1 4-4h8a4 4 0 0 1 4 4a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2Z"
+                        fill="currentColor"
+                        fillRule="evenodd"
+                        d="M8 7a4 4 0 1 1 8 0a4 4 0 0 1-8 0m0 6a5 5 0 0 0-5 5a3 3 0 0 0 3 3h12a3 3 0 0 0 3-3a5 5 0 0 0-5-5z"
+                        clipRule="evenodd"
                       />
-                      <circle cx="12" cy="7" r="3" />
-                    </g>
-                  </svg>
-                </Link>
-              </Button>
+                    </svg>
+                    Login
+                  </Link>
+                </Button>
+              )}
             </div>
           </div>
         </nav>

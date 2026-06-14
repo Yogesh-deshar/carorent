@@ -1,4 +1,4 @@
-"use client"
+"use client";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
 import { poppins } from "@/lib/fonts";
@@ -6,7 +6,7 @@ const Fourweel = () => {
   return (
     <>
       <section className={`h-[595px] md:mx-30 mt-5 ${poppins.className}`}>
-        <h2 className="text-3xl p-2  ml-10">Our Two Wheeler collections </h2>
+        <h2 className="text-3xl p-2  ml-10">Our Four Wheeler collections </h2>
         <Tabs defaultValue="sport">
           <TabsList className="gap-5 ml-5 mt-5 bg-white">
             <TabsTrigger value="sport" className="bg-transparent ">
@@ -177,8 +177,6 @@ const Fourweel = () => {
             </div>
           </TabsContent>
         </Tabs>
-
-       
       </section>
     </>
   );

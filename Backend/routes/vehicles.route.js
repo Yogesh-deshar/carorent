@@ -3,6 +3,7 @@ import {
   registerVehicle,
   deleteVehicle,
   fetchVehicles,
+  fetchVehicleById,
   upload,
 } from "../controller/vehicles.controller.js";
 
@@ -21,4 +22,5 @@ router
   .post(upload.single("image"), handleMulterError, registerVehicle);
 router.route("/delete/:id").delete(deleteVehicle);
 router.route("/fetchvehicle").get(fetchVehicles);
+router.route("/fetchvehicle/:id").get(fetchVehicleById);
 export default router;

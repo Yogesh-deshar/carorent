@@ -74,6 +74,7 @@ const registerVehicle = async (req, res) => {
       VehiclesName,
       VehiclesModel,
       VehiclesYear,
+      VehiclesCategory,
       VehiclesType,
       VehiclesWheel,
       VehiclesEngine,
@@ -119,4 +120,26 @@ const fetchVehicles = async (req, res) => {
   }
 };
 
-export { registerVehicle, deleteVehicle, fetchVehicles, upload };
+const fetchVehicleById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const vehicle = await Vehicle.findById(id);
+
+    if (!vehicle) {
+      return res.status(404).json({ message: "Vehicle not found" });
+    }
+
+    res.status(200).json({ vehicle });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export {
+  registerVehicle,
+  deleteVehicle,
+  fetchVehicles,
+  fetchVehicleById,
+  upload,
+};

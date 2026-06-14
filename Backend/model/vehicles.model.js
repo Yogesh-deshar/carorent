@@ -88,20 +88,39 @@ const vehiclesSchema = new mongoose.Schema({
     minlength: 3,
     maxlength: 30,
   },
-  VehiclesBooked:{
+  VehiclesBooked: {
     type: Boolean,
     default: false,
   },
-  VehiclesBookedBy:{
+  VehiclesBookedBy: {
     type: String,
     default: "",
   },
-  VehiclesBookedFrom:{
+  VehiclesCategory: {
+    type: String,
+    enum: [
+      "Sport",
+      "Classic",
+      "SUV",
+      "Sedan",
+      "Hatchback",
+      "MUV",
+      "MPV",
+      "Van",
+      "Bus",
+      "Truck",
+      "Trailer",
+      "Other",
+    ],
+    default: "Other",
+  },
+
+  VehiclesBookedFrom: {
     type: Date,
   },
-  VehiclesBookedTo:{
+  VehiclesBookedTo: {
     type: Date,
-  }
+  },
 });
 
 const Vehicle = mongoose.model("Vehicle", vehiclesSchema);

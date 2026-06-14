@@ -9,16 +9,27 @@ export interface AuthUser {
 
 const USER_KEY = "user";
 const TOKEN_KEY = "token";
+const AUTH_CHANGE_EVENT = "auth-change";
+
+function notifyAuthChange() {
+  if (typeof window !== "undefined") {
+    window.dispatchEvent(new Event(AUTH_CHANGE_EVENT));
+  }
+}
 
 export function setAuth(token: string, user: AuthUser) {
   localStorage.setItem(TOKEN_KEY, token);
   localStorage.setItem(USER_KEY, JSON.stringify(user));
+  notifyAuthChange();
+}
+
+export function getAuthSnapshot(): string | null {
+  if (typeof window === "undefined") return null;
+  return localStorage.getItem(USER_KEY);
 }
 
 export function getAuthUser(): AuthUser | null {
-  if (typeof window === "undefined") return null;
-
-  const stored = localStorage.getItem(USER_KEY);
+  const stored = getAuthSnapshot();
   if (!stored) return null;
 
   try {
@@ -36,6 +47,22 @@ export function getAuthToken(): string | null {
 export function clearAuth() {
   localStorage.removeItem(TOKEN_KEY);
   localStorage.removeItem(USER_KEY);
+  notifyAuthChange();
+}
+
+export function subscribeToAuth(callback: () => void) {
+  if (typeof window === "undefined") {
+    return () => {};
+  }
+
+  const handleChange = () => callback();
+  window.addEventListener(AUTH_CHANGE_EVENT, handleChange);
+  window.addEventListener("storage", handleChange);
+
+  return () => {
+    window.removeEventListener(AUTH_CHANGE_EVENT, handleChange);
+    window.removeEventListener("storage", handleChange);
+  };
 }
 
 export function isAdmin(user: AuthUser | null): boolean {

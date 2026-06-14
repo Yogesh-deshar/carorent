@@ -28,6 +28,7 @@ const Addcar = () => {
     VehiclesColor: "",
     VehiclesPrice: "",
     VehiclesDetails: "",
+    VehiclesCategory: "",
   });
 
   const [image, setImage] = useState<File | null>(null);
@@ -124,6 +125,7 @@ const Addcar = () => {
         VehiclesColor: "",
         VehiclesPrice: "",
         VehiclesDetails: "",
+        VehiclesCategory: "",
       });
       setImage(null);
     } catch (err) {
@@ -253,6 +255,36 @@ const Addcar = () => {
                 </Select>
               </div>
             </div>
+            <Label htmlFor="VehiclesType" className="mt-4">
+              Car Category
+            </Label>
+            <Select
+              value={formData.VehiclesCategory}
+              onValueChange={(value) =>
+                handleSelectChange("VehiclesCategory", value)
+              }
+            >
+              <SelectTrigger className="mt-2 w-full">
+                <SelectValue placeholder="Select car category" />
+              </SelectTrigger>
+
+              <SelectContent>
+                <SelectGroup>
+                  <SelectItem value="Sport">Sport</SelectItem>
+                  <SelectItem value="Classic">Classic</SelectItem>
+                  <SelectItem value="SUV">SUV</SelectItem>
+                  <SelectItem value="Sedan">Sedan</SelectItem>
+                  <SelectItem value="Hatchback">Hatchback</SelectItem>
+                  <SelectItem value="MUV">MUV</SelectItem>
+                  <SelectItem value="MPV">MPV</SelectItem>
+                  <SelectItem value="Van">Van</SelectItem>
+                  <SelectItem value="Bus">Bus</SelectItem>
+                  <SelectItem value="Truck">Truck</SelectItem>
+                  <SelectItem value="Trailer">Trailer</SelectItem>
+                  <SelectItem value="Other">Other</SelectItem>
+                </SelectGroup>
+              </SelectContent>
+            </Select>
 
             <p className="mt-6 text-[#909090] text-2xl">Car Engine Details</p>
 
