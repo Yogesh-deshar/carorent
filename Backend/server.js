@@ -9,6 +9,7 @@ import mongoose from "mongoose";
 import connectDB from "./config/database.js";
 import router from "./routes/user.routes.js";
 import vehiclesRouter from "./routes/vehicles.route.js";
+import bookingRouter from "./routes/booking.routes.js";
 
 // const multer = require("multer");
 
@@ -36,6 +37,7 @@ app.use("/uploads", express.static("uploads"));
 // Register routes BEFORE starting server
 app.use("/api/users", router);
 app.use("/api/vehicles", vehiclesRouter);
+app.use("/api/bookings", bookingRouter);
 
 const ServerStart = async () => {
   try {

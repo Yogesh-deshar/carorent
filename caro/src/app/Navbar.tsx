@@ -4,7 +4,8 @@ import { Button } from "@/components/ui/button";
 import { AuthUser, getAuthSnapshot, subscribeToAuth } from "@/lib/auth";
 import Image from "next/image";
 import Link from "next/link";
-import { useMemo, useSyncExternalStore } from "react";
+import { useRouter } from "next/navigation";
+import { FormEvent, useMemo, useState, useSyncExternalStore } from "react";
 
 function parseAuthUser(snapshot: string | null): AuthUser | null {
   if (!snapshot) return null;
@@ -17,12 +18,23 @@ function parseAuthUser(snapshot: string | null): AuthUser | null {
 }
 
 const Navbar = () => {
+  const router = useRouter();
+  const [searchValue, setSearchValue] = useState("");
   const userSnapshot = useSyncExternalStore(
     subscribeToAuth,
     getAuthSnapshot,
     () => null,
   );
   const user = useMemo(() => parseAuthUser(userSnapshot), [userSnapshot]);
+
+  const handleSearch = (event: FormEvent<HTMLFormElement>) => {
+    event.preventDefault();
+    const query = searchValue.trim();
+
+    if (query) {
+      router.push(`/Search?q=${encodeURIComponent(query)}`);
+    }
+  };
 
   return (
     <>
@@ -40,13 +52,18 @@ const Navbar = () => {
             />
           </Link>
 
-          <div className="w-[420px] rounded-2xl border-black border flex items-center">
+          <form
+            onSubmit={handleSearch}
+            className="w-[420px] rounded-2xl border-black border flex items-center"
+          >
             <input
               type="text"
-              className="focus:outline-none w-[100%] px-3"
-              placeholder="Search the car you wnat to find"
+              value={searchValue}
+              onChange={(event) => setSearchValue(event.target.value)}
+              className="focus:outline-none w-full px-3"
+              placeholder="Search the car you want to find"
             />
-            <Button className="bg-transparent text-black ">
+            <Button type="submit" className="bg-transparent text-black">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="24"
@@ -63,7 +80,7 @@ const Navbar = () => {
                 />
               </svg>
             </Button>
-          </div>
+          </form>
 
           <div className="flex gap-5 items-center">
             <div>

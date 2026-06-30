@@ -1,4 +1,5 @@
 "use client";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
@@ -6,14 +7,39 @@ import Image from "next/image";
 import Rented from "./Rented";
 import Edit from "./Edit";
 
-import { useRouter } from "next/navigation";
-import { clearAuth } from "@/lib/auth";
+import { useParams, useRouter, useSearchParams } from "next/navigation";
+import { AuthUser, clearAuth, getAuthUser } from "@/lib/auth";
 const Profile = () => {
+  const { id } = useParams();
   const router = useRouter();
+  const searchParams = useSearchParams();
+  const defaultTab = searchParams.get("tab") || "info";
+  const [user, setUser] = useState<AuthUser | null>(null);
+  const [isAuthChecked] = useState(() => {
+    if (typeof window === "undefined") return false;
+    return !!getAuthUser();
+  });
+
+  useEffect(() => {
+    if (!isAuthChecked) {
+      router.push("/Login");
+    } else {
+      const fetchUser = async () => {
+        const response = await fetch(
+          `http://localhost:8000/api/users/fetchuser/${id}`,
+        );
+    const data = await response.json();
+    setUser(data.user);
+      };
+      fetchUser();
+    }
+  }, [isAuthChecked, router, id]);
+  console.log(user);
+
   return (
     <>
       <section className=" mt-5 mx-[30px]">
-        <Tabs defaultValue="info" className="flex !flex-row rounded-none">
+        <Tabs defaultValue={defaultTab} className="flex !flex-row rounded-none">
           <div>
             <TabsList className="flex flex-col gap-2 !h-[550px]  justify-start rounded-none bg-white">
               <TabsTrigger
@@ -79,8 +105,8 @@ const Profile = () => {
                 />
                 <div className="flex justify-between w-full">
                   <div className="text-[24px] ml-5">
-                    <p>Name : Test</p>
-                    <p>Role</p>
+                    <p>Name : {user?.username}</p>
+                    <p>Role : {user?.Role}</p>
                   </div>
 
                   <Button className="bg-transparent text-black border border-[#DEDCDC] px-[34px] py-[10px]">
@@ -108,17 +134,19 @@ const Profile = () => {
 
                 <dl className="mt-2">
                   <dt className="text-[#989898]">Email</dt>
-                  <dd className="font-semibold">test@example.com</dd>
+                  <dd className="font-semibold">{user?.Email}</dd>
                 </dl>
 
                 <dl className="mt-2">
                   <dt className="text-[#989898]">Phone Numbser</dt>
-                  <dd className="font-semibold">9800000000</dd>
+                  <dd className="font-semibold">{user?.PhoneNumber}</dd>
                 </dl>
 
                 <dl className="mt-2">
                   <dt className="text-[#989898]">License number</dt>
-                  <dd className="font-semibold">01-02-02-02-02</dd>
+                  <dd className="font-semibold">
+                    {user?.DrivingLicenseNumber}
+                  </dd>
                 </dl>
               </div>
 
@@ -126,20 +154,15 @@ const Profile = () => {
                 <p className="text-2xl p-3">Address</p>
 
                 <dl className="mt-2">
-                  <dt className="text-[#989898]">Country</dt>
-                  <dd className="font-semibold">Nepal</dd>
-                </dl>
-
-                <dl className="mt-2">
                   <dt className="text-[#989898]">City</dt>
-                  <dd className="font-semibold">Chapagaun</dd>
+                  <dd className="font-semibold">{user?.Address}</dd>
                 </dl>
               </div>
             </TabsContent>
 
             <TabsContent value="rented">
               <p className="text-2xl">Vehicle You Have Rented</p>
-              <Rented />
+              <Rented userId={id as string} />
             </TabsContent>
 
             <TabsContent value="edit" className="grid justify-center">

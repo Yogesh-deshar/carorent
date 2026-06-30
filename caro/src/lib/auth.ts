@@ -5,6 +5,10 @@ export interface AuthUser {
   username: string;
   Email: string;
   Role: UserRole;
+  PhoneNumber: string;
+  DrivingLicenseNumber: string;
+
+  Address: string;
 }
 
 const USER_KEY = "user";

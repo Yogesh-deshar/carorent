@@ -4,6 +4,8 @@ import {
   deleteVehicle,
   fetchVehicles,
   fetchVehicleById,
+  searchVehicles,
+  recommendSimilarVehicles,
   upload,
 } from "../controller/vehicles.controller.js";
 
@@ -21,6 +23,8 @@ router
   .route("/register")
   .post(upload.single("image"), handleMulterError, registerVehicle);
 router.route("/delete/:id").delete(deleteVehicle);
+router.route("/search").get(searchVehicles);
+router.route("/similar/:id").get(recommendSimilarVehicles);
 router.route("/fetchvehicle").get(fetchVehicles);
 router.route("/fetchvehicle/:id").get(fetchVehicleById);
 export default router;

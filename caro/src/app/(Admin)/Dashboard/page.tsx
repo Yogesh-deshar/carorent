@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Dashboard from "./Dashboard";
 import User from "./User";
 import Addcar from "./Addcar";
+import Rented from "./Rented";
 
 const AdminDashboard = () => {
   return (
@@ -46,7 +47,7 @@ const AdminDashboard = () => {
           </TabsContent>
 
           <TabsContent value="Rented">
-            <Dashboard />
+            <Rented />
           </TabsContent>
 
           <TabsContent value="Addcar">

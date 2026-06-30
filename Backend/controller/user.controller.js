@@ -123,4 +123,15 @@ const loginUser = async (req, res) => {
   }
 };
 
-export { registerUser, deleteUser, fetchUsers, loginUser };
+const fetchUserById = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const user = await User.findById(id);
+    res.status(200).json({ message: "User fetched successfully", user });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ message: "Internal server error" });
+    }
+  };
+
+  export { registerUser, deleteUser, fetchUsers, loginUser, fetchUserById };

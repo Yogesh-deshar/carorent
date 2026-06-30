@@ -172,7 +172,9 @@ const Cardetail = () => {
                       </div>
 
                       <div className="flex justify-between py-2.5 text-sm border-b border-border">
-                        <dt className="text-muted-foreground">Exterior Color</dt>
+                        <dt className="text-muted-foreground">
+                          Exterior Color
+                        </dt>
                         <dd className="font-medium text-foreground">
                           {vehicle.VehiclesColor}
                         </dd>
