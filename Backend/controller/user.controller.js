@@ -77,7 +77,7 @@ const deleteUser = async (req, res) => {
 
 const fetchUsers = async (req, res) => {
   try {
-    const users = await User.find();
+    const users = await User.find().select("-Password");
     res.status(200).json(users);
   } catch (error) {
     console.error(error);
@@ -126,12 +126,91 @@ const loginUser = async (req, res) => {
 const fetchUserById = async (req, res) => {
   try {
     const { id } = req.params;
-    const user = await User.findById(id);
+    const user = await User.findById(id).select("-Password");
+
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
     res.status(200).json({ message: "User fetched successfully", user });
   } catch (error) {
     console.error(error);
     res.status(500).json({ message: "Internal server error" });
-    }
-  };
+  }
+};
 
-  export { registerUser, deleteUser, fetchUsers, loginUser, fetchUserById };
+const updateUser = async (req, res) => {
+  try {
+    const { id } = req.params;
+    const {
+      username,
+      PhoneNumber,
+      Email,
+      DrivingLicenseNumber,
+      Address,
+      Password,
+    } = req.body;
+
+    const user = await User.findById(id);
+    if (!user) {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const updates = {};
+
+    if (username !== undefined) updates.username = username;
+    if (PhoneNumber !== undefined) updates.PhoneNumber = PhoneNumber;
+    if (DrivingLicenseNumber !== undefined) {
+      updates.DrivingLicenseNumber = DrivingLicenseNumber;
+    }
+    if (Address !== undefined) updates.Address = Address;
+
+    if (Email !== undefined) {
+      const normalizedEmail = Email.toLowerCase();
+      if (normalizedEmail !== user.Email.toLowerCase()) {
+        const existingUser = await User.findOne({ Email: normalizedEmail });
+        if (existingUser) {
+          return res.status(400).json({ message: "Email already exists" });
+        }
+      }
+      updates.Email = normalizedEmail;
+    }
+
+    if (Password) {
+      if (Password.length < 6) {
+        return res
+          .status(400)
+          .json({ message: "Password must be at least 6 characters" });
+      }
+      updates.Password = await bcrypt.hash(Password, 10);
+    }
+
+    const updatedUser = await User.findByIdAndUpdate(id, updates, {
+      new: true,
+      runValidators: true,
+    }).select("-Password");
+
+    res.status(200).json({
+      message: "User updated successfully",
+      user: updatedUser,
+    });
+  } catch (error) {
+    console.error(error);
+    if (error.name === "ValidationError") {
+      const message = Object.values(error.errors)
+        .map((err) => err.message)
+        .join(", ");
+      return res.status(400).json({ message });
+    }
+    res.status(500).json({ message: "Internal server error" });
+  }
+};
+
+export {
+  registerUser,
+  deleteUser,
+  fetchUsers,
+  loginUser,
+  fetchUserById,
+  updateUser,
+};

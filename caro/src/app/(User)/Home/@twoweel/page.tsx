@@ -112,9 +112,7 @@ function VehicleList({
   emptyMessage: string;
 }) {
   if (vehicles.length === 0) {
-    return (
-      <p className="p-5 text-gray-600">{emptyMessage}</p>
-    );
+    return <p className="p-5 text-gray-600">{emptyMessage}</p>;
   }
 
   return (
@@ -215,7 +213,10 @@ const Twoweel = () => {
         )}
 
         <p className="text-green-400 flex float-end">
-          <Link href="" className="opacity-0 md:opacity-100 flex gap-1">
+          <Link
+            href="/Morev?wheel=2"
+            className="opacity-0 md:opacity-100 flex gap-1"
+          >
             check more collection
             <svg
               xmlns="http://www.w3.org/2000/svg"

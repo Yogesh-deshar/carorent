@@ -1,5 +1,5 @@
 "use client";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Image from "next/image";
@@ -23,18 +23,27 @@ const Profile = () => {
   useEffect(() => {
     if (!isAuthChecked) {
       router.push("/Login");
-    } else {
-      const fetchUser = async () => {
-        const response = await fetch(
-          `http://localhost:8000/api/users/fetchuser/${id}`,
-        );
+      return;
+    }
+
+    const fetchUser = async () => {
+      const response = await fetch(
+        `http://localhost:8000/api/users/fetchuser/${id}`,
+      );
+      const data = await response.json();
+      setUser(data.user);
+    };
+
+    fetchUser();
+  }, [isAuthChecked, router, id]);
+
+  const refreshUser = useCallback(async () => {
+    const response = await fetch(
+      `http://localhost:8000/api/users/fetchuser/${id}`,
+    );
     const data = await response.json();
     setUser(data.user);
-      };
-      fetchUser();
-    }
-  }, [isAuthChecked, router, id]);
-  console.log(user);
+  }, [id]);
 
   return (
     <>
@@ -167,7 +176,7 @@ const Profile = () => {
 
             <TabsContent value="edit" className="grid justify-center">
               <p className="text-2xl">Edit</p>
-              <Edit />
+              <Edit onUpdated={refreshUser} />
             </TabsContent>
           </div>
         </Tabs>

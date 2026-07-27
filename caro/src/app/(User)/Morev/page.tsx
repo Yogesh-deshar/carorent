@@ -2,6 +2,7 @@
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { poppins } from "@/lib/fonts";
+import { useSearchParams } from "next/navigation";
 import Link from "next/link";
 import { useEffect, useMemo, useState } from "react";
 
@@ -124,7 +125,9 @@ function VehicleList({
   );
 }
 
-const Fourweel = () => {
+const Morev = () => {
+  const searchParams = useSearchParams();
+  const selectedWheel = searchParams.get("wheel") === "4" ? "4" : "2";
   const [vehicles, setVehicles] = useState<Vehicle[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
@@ -141,11 +144,11 @@ const Fourweel = () => {
           throw new Error(data.message || "Unable to load vehicles");
         }
 
-        const fourWheelers = (data.vehicles || []).filter(
-          (vehicle: Vehicle) => vehicle.VehiclesWheel === "4",
+        const filteredVehicles = (data.vehicles || []).filter(
+          (vehicle: Vehicle) => vehicle.VehiclesWheel === selectedWheel,
         );
 
-        setVehicles(fourWheelers);
+        setVehicles(filteredVehicles);
       } catch (err) {
         setError(err instanceof Error ? err.message : "Unknown error");
       } finally {
@@ -154,7 +157,7 @@ const Fourweel = () => {
     };
 
     fetchVehicles();
-  }, []);
+  }, [selectedWheel]);
 
   const sportVehicles = useMemo(
     () =>
@@ -172,13 +175,30 @@ const Fourweel = () => {
     [vehicles],
   );
 
+  const heading =
+    selectedWheel === "4"
+      ? "Our Four Wheeler collections"
+      : "Our Two Wheeler collections";
+  const loadingMessage =
+    selectedWheel === "4"
+      ? "Loading four wheelers..."
+      : "Loading two wheelers...";
+  const emptySportMessage =
+    selectedWheel === "4"
+      ? "No sport four wheelers available."
+      : "No sport two wheelers available.";
+  const emptyClassicMessage =
+    selectedWheel === "4"
+      ? "No classic four wheelers available."
+      : "No classic two wheelers available.";
+
   return (
     <>
       <section className={`h-[595px] md:mx-30 mt-5 ${poppins.className}`}>
-        <h2 className="text-3xl p-2 ml-10">Our Four Wheeler collections</h2>
+        <h2 className="text-3xl p-2 ml-10">{heading}</h2>
 
         {loading ? (
-          <p className="p-5 text-gray-600">Loading four wheelers...</p>
+          <p className="p-5 text-gray-600">{loadingMessage}</p>
         ) : error ? (
           <p className="p-5 text-red-600">{error}</p>
         ) : (
@@ -196,7 +216,7 @@ const Fourweel = () => {
             >
               <VehicleList
                 vehicles={sportVehicles}
-                emptyMessage="No sport four wheelers available."
+                emptyMessage={emptySportMessage}
               />
             </TabsContent>
 
@@ -206,37 +226,14 @@ const Fourweel = () => {
             >
               <VehicleList
                 vehicles={classicVehicles}
-                emptyMessage="No classic four wheelers available."
+                emptyMessage={emptyClassicMessage}
               />
             </TabsContent>
           </Tabs>
         )}
-
-        <p className="text-green-400 flex float-end">
-          <Link
-            href="/Morev?wheel=4"
-            className="opacity-0 md:opacity-100 flex gap-1"
-          >
-            check more collection
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="24"
-              height="24"
-              viewBox="0 0 24 24"
-            >
-              <g fill="none">
-                <path d="M24 0v24H0V0zM12.593 23.258l-.011.002l-.071.035l-.02.004l-.014-.004l-.071-.035q-.016-.005-.024.005l-.004.01l-.017.428l.005.02l.01.013l.104.074l.015.004l.012-.004l.104-.074l.012-.016l.004-.017l-.017-.427q-.004-.016-.017-.018m.265-.113l-.013.002l-.185.093l-.01.01l-.003.011l.018.43l.005.012l.008.007l.201.093q.019.005.029-.008l.004-.014l-.034-.614q-.005-.019-.02-.022m-.715.002a.02.02 0 0 0-.027.006l-.006.014l-.034.614q.001.018.017.024l.015-.002l.201-.093l.01-.008l.004-.011l.017-.43l-.003-.012l-.01-.01z" />
-                <path
-                  fill="currentColor"
-                  d="m14.707 5.636l5.657 5.657a1 1 0 0 1 0 1.414l-5.657 5.657a1 1 0 0 1-1.414-1.414l3.95-3.95H4a1 1 0 1 1 0-2h13.243l-3.95-3.95a1 1 0 1 1 1.414-1.414"
-                />
-              </g>
-            </svg>
-          </Link>
-        </p>
       </section>
     </>
   );
 };
 
-export default Fourweel;
+export default Morev;
